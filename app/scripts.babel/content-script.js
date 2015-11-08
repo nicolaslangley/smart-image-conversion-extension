@@ -55,6 +55,10 @@ function convertFunction(imgInput, callback) {
   var splitFilename = url.substring(url.lastIndexOf('/')+1).split('.');
   var filename = splitFilename[0]; // TODO: verify that there are two elements
   var typeInput = splitFilename[1];
+  if(typeInput == "jpg") {
+      callback();
+      return;
+  }
   convert.allDone().then(function() {
     convert.run('/'+filename+"."+typeInput, '/'+filename+"."+typeOutput).then(function() {
       console.log("Performing command: convert"+' /'+filename+"."+typeInput+' /'+filename+"."+typeOutput)
@@ -69,7 +73,6 @@ function convertFunction(imgInput, callback) {
       });
     });
   });
-
 }
 
 var allImages = Array.prototype.slice.call(document.getElementsByTagName("img"));
@@ -77,8 +80,8 @@ console.log("Page contains "+allImages.length+" images");
 var typeOutput = "jpeg"; // Possible values are gif, png, tiff, jpeg, bmp
 setupImageMagick();
 asyncLoop(allImages.length, function(loop) {
-    var image = allImages[loop.iteration()];
-    convertFunction(image, function() {
-        console.log("Iteration: "+loop.iteration());
-        loop.next();
-    })}, function(){console.log("Cycle ended")});
+  var image = allImages[loop.iteration()];
+  convertFunction(image, function() {
+    console.log("Iteration: "+loop.iteration());
+    loop.next();
+  })}, function(){console.log("Cycle ended")});
