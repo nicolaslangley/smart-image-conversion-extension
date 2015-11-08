@@ -45,15 +45,14 @@
 
 /* jshint maxlen:80, browser:true */
 /* globals chrome, console, crypto, ErrorEvent */
-'use strict';
-
-(function () {
+(function() {
     'use strict';
     var EXTENSION_ORIGIN = 'chrome-extension://' + chrome.runtime.id;
     var MSG_GET_TOKEN = 'worker_proxy wants to get communication token';
 
     if (location.origin == EXTENSION_ORIGIN) {
-        if (chrome.extension.getBackgroundPage && chrome.extension.getBackgroundPage() === window) {
+        if (chrome.extension.getBackgroundPage &&
+                chrome.extension.getBackgroundPage() === window) {
             chrome.runtime.onMessage.addListener(backgroundPageMessageHandler);
         } else {
             window.addEventListener('message', extensionProxyMessageHandler);
@@ -103,28 +102,28 @@
      */
     function createWorker(messagePort, metadataPort, url) {
         var worker = new Worker(url);
-        worker.onmessage = function (event) {
+        worker.onmessage = function(event) {
             messagePort.postMessage(event.data);
         };
-        worker.onerror = function (event) {
+        worker.onerror = function(event) {
             metadataPort.postMessage({
                 type: 'error',
                 errorDetails: {
                     message: event.message,
                     filename: event.filename,
                     lineno: event.lineno,
-                    colno: event.colno
+                    colno: event.colno,
                 }
             });
         };
-        metadataPort.onmessage = function (event) {
+        metadataPort.onmessage = function(event) {
             if (event.data.type == 'terminate') {
                 worker.terminate();
                 messagePort.close();
                 metadataPort.close();
             }
         };
-        messagePort.onmessage = function (event) {
+        messagePort.onmessage = function(event) {
             worker.postMessage(event.data);
         };
         metadataPort.start();
@@ -135,7 +134,7 @@
         if (!event.data || !event.data.channel_token) {
             return;
         }
-        chrome.runtime.sendMessage(MSG_GET_TOKEN, function (token) {
+        chrome.runtime.sendMessage(MSG_GET_TOKEN, function(token) {
             if (!token || event.data.channel_token !== token) {
                 console.error('Auth failed, refused to create Worker channel.');
                 return;
@@ -160,7 +159,7 @@
         if (!proxyFrame) {
             loadFrameAndFlush();
         } else if (proxyFrameReady) {
-            chrome.runtime.sendMessage(MSG_GET_TOKEN, function (token) {
+            chrome.runtime.sendMessage(MSG_GET_TOKEN, function(token) {
                 if (typeof token != 'string') {
                     // This message is different from the message below, because
                     // failure to get a message for the first time is probably
@@ -174,7 +173,9 @@
                     //    handling and the first message only succeeded by
                     //    coincidence.
                     // 3. A bug in Chrome was introduced (least likely).
-                    console.warn('Failed to initialize Worker because of a ' + 'missing session token. Is the extension runtime ' + 'still valid?');
+                    console.warn('Failed to initialize Worker because of a ' +
+                            'missing session token. Is the extension runtime ' +
+                            'still valid?');
                     return;
                 }
                 flushMessages(token);
@@ -185,11 +186,20 @@
             proxyFrameReady = false;
             proxyFrame = document.createElement('iframe');
             proxyFrame.src = chrome.runtime.getURL('worker_proxy.html');
-            proxyFrame.style.cssText = 'position:fixed!important;' + 'top:-99px!important;' + 'left:-99px!important;' + 'width:2px!important;' + 'height:2px!important;' + 'border:0!important';
-            proxyFrame.onload = function () {
-                chrome.runtime.sendMessage(MSG_GET_TOKEN, function (token) {
+            proxyFrame.style.cssText = 'position:fixed!important;' +
+                'top:-99px!important;' +
+                'left:-99px!important;' +
+                'width:2px!important;' +
+                'height:2px!important;' +
+                'border:0!important';
+            proxyFrame.onload = function() {
+                chrome.runtime.sendMessage(MSG_GET_TOKEN, function(token) {
                     if (typeof token != 'string') {
-                        console.warn('Refused to initialize Web Worker because a ' + 'session token could not be negotiated. Make sure' + 'that worker_proxy.js is loaded first in the ' + 'background or event page.');
+                        console.warn(
+                                'Refused to initialize Web Worker because a ' +
+                                'session token could not be negotiated. Make sure' +
+                                'that worker_proxy.js is loaded first in the ' +
+                                'background or event page.');
                         return;
                     }
                     proxyFrameReady = true;
@@ -204,7 +214,8 @@
             if (!contentWindow) {
                 // This should NEVER happen. When it happens, try to recover by
                 // creating the frame again, so that new Workers can be created.
-                console.warn('WARNING: The worker proxy frame was removed; ' + 'all previous workers have been terminated. ');
+                console.warn('WARNING: The worker proxy frame was removed; ' +
+                        'all previous workers have been terminated. ');
                 loadFrameAndFlush();
                 return;
             }
@@ -226,13 +237,13 @@
         // MessagePort implements EventTarget, onmessage and postMessage, these
         // events will be received by the other end and passed to the Worker.
         var fakeWorker = messageChannel.port1;
-        fakeWorker.terminate = function () {
+        fakeWorker.terminate = function() {
             metadataChannel.port1.postMessage({
                 type: 'terminate'
             });
         };
 
-        metadataChannel.port1.onmessage = function (event) {
+        metadataChannel.port1.onmessage = function(event) {
             if (event.data.type == 'error') {
                 var error = new ErrorEvent('error', event.data.errorDetails);
                 fakeWorker.dispatchEvent(error);
@@ -247,11 +258,13 @@
 
         postMessageToWorkerProxy({
             worker_url: url
-        }, [messageChannel.port2, metadataChannel.port2]);
+        }, [
+        messageChannel.port2,
+        metadataChannel.port2
+        ]);
 
         // Hide the MessagePort methods from the exposed API.
         fakeWorker.close = fakeWorker.start = undefined;
         return fakeWorker;
     }
 })();
-//# sourceMappingURL=worker-proxy.js.map

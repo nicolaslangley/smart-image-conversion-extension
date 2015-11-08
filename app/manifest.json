@@ -20,7 +20,7 @@
     {
       "matches": ["http://*/*"],  
       "js": ["scripts/worker-proxy.js",
-             "scripts/interface.js",
+             "image_magick/scripts/interface.js",
              "scripts/content-script.js"]
     }
   ],
