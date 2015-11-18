@@ -51,10 +51,10 @@ function convertFunction(imgInput, typeOutput, callback) {
   var filename = splitFilename[0]; // TODO: verify that there are two elements
   var typeInput = splitFilename[1];
   if (typeInput === 'jpg') {
+    console.error('Ignoring image ' + filename + '.' + typeInput + 'with file extension .jpg - use .jpeg instead');
     callback();
     return;
   }
-  // TODO: wait until the previous call to convert is all done
   convert.allDone().then(function () {
     convert.run('/' + filename + '.' + typeInput, '/' + filename + '.' + typeOutput).then(function () {
       console.log('Performing command: convert' + ' /' + filename + '.' + typeInput + ' /' + filename + '.' + typeOutput);
@@ -65,7 +65,7 @@ function convertFunction(imgInput, typeOutput, callback) {
         var parentNode = imgInput.parentNode;
         parentNode.removeChild(imgInput);
         parentNode.appendChild(imgOutput);
-        callback(); // TODO: make the callback call to iterate after all promises have been fulfilled
+        callback();
       });
     });
   });
@@ -73,17 +73,14 @@ function convertFunction(imgInput, typeOutput, callback) {
 
 var allImages = Array.prototype.slice.call(document.getElementsByTagName('img'));
 console.log('Page contains ' + allImages.length + ' images');
-var typeOutput = 'jpeg'; // Possible values are gif, png, tiff, jpeg, bmp
-//setupImageMagick();
-asyncLoop(allImages.length, function (loop) {
+var typeOutput = 'bmp'; // Possible values are gif, png, tiff, jpeg, bmp
+asyncLoop(allImages.length, function (loop) { // TODO: create multiple workers or use single loop?
   var image = allImages[loop.iteration()];
   convertFunction(image, typeOutput, function () {
-    console.log('Iteration: ' + loop.iteration());
-    //loopUntilConvertDone();
     loop.next();
   });
 }, function () {
-  console.log('Cycle ended');
+  console.log('All images processed');
 });
 
 
