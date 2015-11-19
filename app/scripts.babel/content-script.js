@@ -71,16 +71,26 @@ function convertFunction(imgInput, typeOutput, callback) {
   });
 }
 
-var allImages = Array.prototype.slice.call(document.getElementsByTagName('img'));
-console.log('Page contains ' + allImages.length + ' images');
-var typeOutput = 'bmp'; // Possible values are gif, png, tiff, jpeg, bmp
-asyncLoop(allImages.length, function (loop) { // TODO: create multiple workers or use single loop?
-  var image = allImages[loop.iteration()];
-  convertFunction(image, typeOutput, function () {
-    loop.next();
+function convertImages() {
+  var allImages = Array.prototype.slice.call(document.getElementsByTagName('img'));
+  console.log('Page contains ' + allImages.length + ' images');
+  asyncLoop(allImages.length, function (loop) { // TODO: create multiple workers or use single loop?
+    var image = allImages[loop.iteration()];
+    convertFunction(image, typeOutput, function () {
+      loop.next();
+    });
+  }, function () {
+    console.log('All images processed');
   });
-}, function () {
-  console.log('All images processed');
+}
+
+var typeOutput = 'jpeg' // This is the default
+chrome.storage.sync.get({
+  outputFormat: 'jpeg',
+}, function(items) {
+  typeOutput = items.outputFormat; // Possible values are gif, png, tiff, jpeg, bmp
+  console.log('Converting to ' + typeOutput);
+  convertImages();
 });
 
 
