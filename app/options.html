@@ -1,19 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head><title>My Test Extension Options</title></head>
+<head>
+  <meta charset="utf-8">
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css styles/main.css -->
+  <link href="styles/main.css" rel="stylesheet">
+  <!-- endbuild -->
+  <title>Smart Image Conversion Options</title>
+</head>
 <body>
 
+<h1>Smart Image Conversion Options</h1>
 Image Output Format:
-<select id="format">
-  <option value="png">png</option>
-  <option value="jpeg">jpeg</option>
-  <option value="bmp">bmp</option>
-  <option value="tiff">tiff</option>
-</select>
+<br>
+
+<div id="formatOptions" class="btn-group" data-toggle="buttons">
+  <label class="btn btn-default">
+    <input type="radio" name="options" id="png" autocomplete="off" value="png"> png
+  </label>
+  <label class="btn btn-default">
+    <input type="radio" name="options" id="jpeg" autocomplete="off" value="jpeg"> jpeg
+  </label>
+  <label class="btn btn-default">
+    <input type="radio" name="options" id="bmp" autocomplete="off" value="bmp"> bmp
+  </label>
+</div>
+<br>
 
 <div id="status"></div>
-<button id="save">Save</button>
+<br>
+<button type="button" id="save" data-loading-text="Saving..." class="btn btn-primary" autocomplete="off">
+  Save
+</button>
 
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js scripts/options.js -->
 <script src="scripts/options.js"></script>
+<!-- endbuild -->
 </body>
 </html>
