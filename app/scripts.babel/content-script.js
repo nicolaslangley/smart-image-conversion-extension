@@ -65,6 +65,10 @@ function convertFunction(imgInput, typeOutput, callback) {
         var parentNode = imgInput.parentNode;
         parentNode.removeChild(imgInput);
         parentNode.appendChild(imgOutput);
+        chrome.runtime.sendMessage({
+          from:    'content',
+          subject: 'incrementBadge'
+        });
         callback();
       });
     });
@@ -74,7 +78,7 @@ function convertFunction(imgInput, typeOutput, callback) {
 function convertImages() {
   var allImages = Array.prototype.slice.call(document.getElementsByTagName('img'));
   console.log('Page contains ' + allImages.length + ' images');
-  asyncLoop(allImages.length, function (loop) { // TODO: create multiple workers or use single loop?
+  asyncLoop(allImages.length, function (loop) { // TODO: create multiple workers at once for speed increase?
     var image = allImages[loop.iteration()];
     convertFunction(image, typeOutput, function () {
       loop.next();
@@ -84,9 +88,9 @@ function convertImages() {
   });
 }
 
-var typeOutput = 'jpeg' // This is the default
+var typeOutput = '';
 chrome.storage.sync.get({
-  outputFormat: 'jpeg',
+  outputFormat: 'jpeg', // This is the default
 }, function(items) {
   typeOutput = items.outputFormat; // Possible values are gif, png, tiff, jpeg, bmp
   console.log('Converting to ' + typeOutput);
