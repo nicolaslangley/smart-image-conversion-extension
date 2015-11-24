@@ -84,9 +84,26 @@ function convertImages() {
       loop.next();
     });
   }, function () {
+    $("#loadModal").modal('hide');
     console.log('All images processed');
   });
 }
+
+$(document.body).prepend('<div id="loadModal" class="modal fade">' +
+  '<div class="modal-dialog">' +
+  '<div class="modal-content">' +
+  '<div class="modal-header">' +
+  '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+  '<h4 class="modal-title">Converting images...</h4>' +
+  '</div><div class="modal-body">' +
+  '<div class="progress">' +
+  '<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">' +
+  '<span class="sr-only"/></div></div>' +
+  '</div></div></div></div>');
+
+$(document).ready(function(){
+  $("#loadModal").modal('show');
+});
 
 var typeOutput = '';
 chrome.storage.sync.get({

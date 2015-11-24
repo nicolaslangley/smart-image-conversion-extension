@@ -23,11 +23,17 @@
       "matches": [
         "http://*/*"
       ],
+      "css":[
+        "bower_components/bootstrap/dist/css/bootstrap.css"
+      ],
       "js": [
+        "bower_components/jquery/dist/jquery.js",
+        "bower_components/bootstrap/dist/js/bootstrap.js",
         "scripts/worker-proxy.js",
         "image_magick/scripts/interface.js",
         "scripts/content-script.js"
-      ]
+      ],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
