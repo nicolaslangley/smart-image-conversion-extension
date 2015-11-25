@@ -15,24 +15,66 @@
 <body>
 
 <h1>Smart Image Conversion Options</h1>
-Image Output Format:
+
+Operating System:
+<br>
+<div id="operatingSystemOptions" class="btn-group" data-toggle="buttons">
+  <label class="btn btn-default">
+    <input type="radio" name="osOptions" id="windows" autocomplete="off" value="windows"> Windows
+  </label>
+  <label class="btn btn-default">
+    <input type="radio" name="osOptions" id="linux" autocomplete="off" value="linux"> Linux
+  </label>
+  <label class="btn btn-default">
+    <input type="radio" name="osOptions" id="osx" autocomplete="off" value="osx"> Mac OS X
+  </label>
+</div>
 <br>
 
+Compression type:
+<br>
+<div id="compressionOptions" class="btn-group" data-toggle="buttons">
+  <label class="btn btn-default">
+    <input type="radio" name="compressionOptions" id="lossy" autocomplete="off" value="lossy"> Lossy
+  </label>
+  <label class="btn btn-default">
+    <input type="radio" name="compressionOptions" id="lossless" autocomplete="off" value="lossless"> Lossless
+  </label>
+  <label class="btn btn-default">
+    <input type="radio" name="compressionOptions" id="uncompressed" autocomplete="off" value="uncompressed"> Uncompressed
+  </label>
+</div>
+<br>
+
+Color range:
+<br>
+<div id="colorSpaceOptions" class="btn-group" data-toggle="buttons">
+  <label class="btn btn-default">
+    <input type="radio" name="colorOptions" id="yescolorhigh" autocomplete="off" value="yescolorhigh"> High-color range
+  </label>
+  <label class="btn btn-default">
+    <input type="radio" name="colorOptions" id="nocolorhigh" autocomplete="off" value="nocolorhigh"> Normal-color range
+  </label>
+</div>
+<br>
+
+Image Output Format:
+<br>
 <div id="formatOptions" class="btn-group" data-toggle="buttons">
   <label class="btn btn-default">
-    <input type="radio" name="options" id="png" autocomplete="off" value="png"> png
+    <input type="radio" name="formatOptions" id="png" autocomplete="off" value="png"> png
   </label>
   <label class="btn btn-default">
-    <input type="radio" name="options" id="jpeg" autocomplete="off" value="jpeg"> jpeg
+    <input type="radio" name="formatOptions" id="jpeg" autocomplete="off" value="jpeg"> jpeg
   </label>
   <label class="btn btn-default">
-    <input type="radio" name="options" id="bmp" autocomplete="off" value="bmp"> bmp
+    <input type="radio" name="formatOptions" id="bmp" autocomplete="off" value="bmp"> bmp
   </label>
   <label class="btn btn-default">
-    <input type="radio" name="options" id="tiff" autocomplete="off" value="tiff"> tiff
+    <input type="radio" name="formatOptions" id="tiff" autocomplete="off" value="tiff"> tiff
   </label>
   <label class="btn btn-default">
-    <input type="radio" name="options" id="gif" autocomplete="off" value="gif"> gif
+    <input type="radio" name="formatOptions" id="gif" autocomplete="off" value="gif"> gif
   </label>
 </div>
 <br>
