@@ -50,8 +50,8 @@ function convertFunction(imgInput, typeOutput, callback) {
   var splitFilename = url.substring(url.lastIndexOf('/') + 1).split('.');
   var filename = splitFilename[0]; // TODO: verify that there are two elements
   var typeInput = splitFilename[1];
-  if (typeInput === 'jpg') {
-    console.error('Ignoring image ' + filename + '.' + typeInput + 'with file extension .jpg - use .jpeg instead');
+  if (typeInput != "gif" && typeInput != "png" && typeInput != "bmp" && typeInput != "tiff" && typeInput != "jpeg") {
+    console.error('Ignoring image ' + filename + '.' + typeInput + ' unsupported file extension detected!');
     callback();
     return;
   }
