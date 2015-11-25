@@ -13,6 +13,10 @@ chrome.runtime.onMessage.addListener(function (msg, sender) {
     badgeCount += 1;
     chrome.browserAction.setBadgeText({text: badgeCount.toString()});
   }
+  else if ((msg.from === 'content') && (msg.subject === 'resetBadge')) {
+    badgeCount = 0;
+    chrome.browserAction.setBadgeText({text: badgeCount.toString()});
+  }
 });
 
 

@@ -111,6 +111,10 @@ chrome.storage.sync.get({
 }, function(items) {
   typeOutput = items.outputFormat; // Possible values are gif, png, tiff, jpeg, bmp
   console.log('Converting to ' + typeOutput);
+  chrome.runtime.sendMessage({
+    from:    'content',
+    subject: 'resetBadge'
+  });
   convertImages();
 });
 
