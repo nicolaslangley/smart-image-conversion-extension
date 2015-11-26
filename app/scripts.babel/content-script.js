@@ -1,34 +1,4 @@
-function asyncLoop(iterations, func, callback) {
-  var index = 0;
-  var done = false;
-  var loop = {
-    next: function () {
-      if (done) {
-        return;
-      }
-
-      if (index < iterations) {
-        index++;
-        func(loop);
-
-      } else {
-        done = true;
-        callback();
-      }
-    },
-
-    iteration: function () {
-      return index - 1;
-    },
-
-    break: function () {
-      done = true;
-      callback();
-    }
-  };
-  loop.next();
-  return loop;
-}
+'use strict';
 
 function convertFunction(imgInput, typeOutput, callback) {
   var convert = new Interface(chrome.runtime.getURL('image_magick/scripts/convert-worker.js'));
@@ -77,15 +47,17 @@ function convertFunction(imgInput, typeOutput, callback) {
 
 function convertImages(typeOutput) {
   var allImages = Array.prototype.slice.call(document.getElementsByTagName('img'));
+  var toConvert = allImages.length;
+  var convertCount = 0;
   console.log('Page contains ' + allImages.length + ' images');
-  asyncLoop(allImages.length, function (loop) { // TODO: create multiple workers at once for speed increase?
-    var image = allImages[loop.iteration()];
-    convertFunction(image, typeOutput, function () {
-      loop.next();
+  allImages.forEach(function (element, index, array) {
+    convertFunction(element, typeOutput, function () {
+      convertCount++;
+      if (convertCount == toConvert) {
+        $("#loadModal").modal('hide');
+        console.log('All images processed');
+      }
     });
-  }, function () {
-    $("#loadModal").modal('hide');
-    console.log('All images processed');
   });
 }
 
