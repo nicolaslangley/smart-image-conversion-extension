@@ -4,8 +4,6 @@ chrome.runtime.onInstalled.addListener(function(details) {
   console.log('previousVersion', details.previousVersion);
 });
 
-
-console.log('Event Page for Browser Action');
 var badgeCount = 0;
 chrome.browserAction.setBadgeText({text: badgeCount.toString()});
 chrome.runtime.onMessage.addListener(function (msg, sender) {

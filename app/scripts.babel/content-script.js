@@ -75,7 +75,7 @@ function convertFunction(imgInput, typeOutput, callback) {
   });
 }
 
-function convertImages() {
+function convertImages(typeOutput) {
   var allImages = Array.prototype.slice.call(document.getElementsByTagName('img'));
   console.log('Page contains ' + allImages.length + ' images');
   asyncLoop(allImages.length, function (loop) { // TODO: create multiple workers at once for speed increase?
@@ -105,17 +105,15 @@ $(document).ready(function(){
   $("#loadModal").modal('show');
 });
 
-var typeOutput = '';
 chrome.storage.sync.get({
-  outputFormat: 'jpeg', // This is the default
+  outputFormat: 'jpeg',
 }, function(items) {
-  typeOutput = items.outputFormat; // Possible values are gif, png, tiff, jpeg, bmp
-  console.log('Converting to ' + typeOutput);
   chrome.runtime.sendMessage({
     from:    'content',
     subject: 'resetBadge'
   });
-  convertImages();
+  console.log('Converting to ' + items.outputFormat);
+  convertImages(items.outputFormat);
 });
 
 

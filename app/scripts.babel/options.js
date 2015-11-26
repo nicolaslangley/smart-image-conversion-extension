@@ -1,15 +1,31 @@
 'use strict';
 
+function determineOutputType(os, compression, highColor) {
+  console.log(os + ' ' + compression + ' ' + highColor);
+  if (compression == 'lossy') {
+    return 'jpeg';
+  } else {
+    if (highColor == 'yescolorhigh') {
+      return 'tiff';
+    } else if (os == 'windows') {
+      return 'bmp';
+    } else {
+      return 'png';
+    }
+  }
+}
+
 // Saves options to chrome.storage
 function save_options() {
   var format = $('#formatOptions input:radio:checked').val();
   var compression = $('#compressionOptions input:radio:checked').val();
   var os = $('#operatingSystemOptions input:radio:checked').val();
   var colorSetting = $('#colorSpaceOptions input:radio:checked').val();
-  console.log("Saving to format " + format);
+  var format = determineOutputType(os, compression, colorSetting);
   console.log("Saving compression to " + compression);
   console.log("Saving to operating system " + os);
   console.log("Saving to color range " + colorSetting);
+  console.log("Saving to format " + format);
   chrome.storage.sync.set({
     outputFormat: format,
     compressionType: compression,
@@ -18,7 +34,7 @@ function save_options() {
   }, function () {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
+    status.textContent = 'Options saved. Converting to ' + format;
     setTimeout(function () {
       status.textContent = '';
     }, 750);
