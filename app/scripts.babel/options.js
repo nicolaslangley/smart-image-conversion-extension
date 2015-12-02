@@ -17,20 +17,27 @@ function determineOutputType(os, compression, highColor) {
 
 // Saves options to chrome.storage
 function save_options() {
-  var format = $('#formatOptions input:radio:checked').val();
   var compression = $('#compressionOptions input:radio:checked').val();
   var os = $('#operatingSystemOptions input:radio:checked').val();
   var colorSetting = $('#colorSpaceOptions input:radio:checked').val();
+  var formatOverride = $('#formatOverrideOptions input:radio:checked').val();
+  var showProgress = $('#progressDisplayOptions input:radio:checked').val();
   var format = determineOutputType(os, compression, colorSetting);
+  if (formatOverride == 'yesformatover') {
+    format = $('#formatOptions input:radio:checked').val();
+  }
   console.log("Saving compression to " + compression);
   console.log("Saving to operating system " + os);
   console.log("Saving to color range " + colorSetting);
+  console.log("Saving format override setting " + colorSetting);
   console.log("Saving to format " + format);
   chrome.storage.sync.set({
     outputFormat: format,
     compressionType: compression,
     operatingSystem: os,
-    colorRange: colorSetting
+    colorRange: colorSetting,
+    formatOver: formatOverride,
+    showModal: showProgress
   }, function () {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -49,16 +56,21 @@ function restore_options() {
     outputFormat: 'jpeg',
     compressionType: 'lossless',
     operatingSystem: 'linux',
-    colorRange: 'nocolorhigh'
+    colorRange: 'nocolorhigh',
+    formatOver: 'noformatover',
+    showModal: 'yesdispprog'
   }, function (items) {
     console.log("Restoring to format " + items.outputFormat);
     console.log("Restoring compression to " + items.compressionType);
     console.log("Restoring to operating system " + items.operatingSystem);
     console.log("Restoring to color range " + items.colorRange);
+    console.log("Restoring progress display setting to " + items.showModal);
     $('#' + items.outputFormat).closest('.btn').button('toggle');
     $('#' + items.compressionType).closest('.btn').button('toggle');
     $('#' + items.operatingSystem).closest('.btn').button('toggle');
     $('#' + items.colorRange).closest('.btn').button('toggle');
+    $('#' + items.formatOver).closest('.btn').button('toggle');
+    $('#' + items.showModal).closest('.btn').button('toggle');
   });
 }
 

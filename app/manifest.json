@@ -12,10 +12,11 @@
     "persistent": false,
     "scripts": [
       "bower_components/jquery/dist/jquery.js",
-      "scripts/options.js",
       "scripts/worker-proxy.js",
       "scripts/chromereload.js",
-      "scripts/background.js"
+      "scripts/background.js",
+      "scripts/options.js",
+      "scripts/popup.js"
     ]
   },
   "content_scripts": [

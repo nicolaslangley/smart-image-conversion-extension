@@ -48,6 +48,11 @@ function convertFunction(imgInput, typeOutput, callback) {
 function convertImages(typeOutput) {
   var allImages = Array.prototype.slice.call(document.getElementsByTagName('img'));
   var toConvert = allImages.length;
+  if (toConvert == 0) {
+    $("#loadModal").modal('hide');
+    console.log('No images to process');
+    return;
+  }
   var convertCount = 0;
   console.log('Page contains ' + allImages.length + ' images');
   allImages.forEach(function (element, index, array) {
@@ -73,18 +78,19 @@ $(document.body).prepend('<div id="loadModal" class="modal fade">' +
   '<span class="sr-only"/></div></div>' +
   '</div></div></div></div>');
 
-$(document).ready(function(){
-  $("#loadModal").modal('show');
-});
-
 chrome.storage.sync.get({
   outputFormat: 'jpeg',
+  showModal: 'yesdispprog'
 }, function(items) {
+  if (items.showModal == 'yesdispprog') {
+    $("#loadModal").modal('show');
+  }
   chrome.runtime.sendMessage({
     from:    'content',
     subject: 'resetBadge'
   });
   console.log('Converting to ' + items.outputFormat);
+  console.log('Showing loading modal' + items.showModal)
   convertImages(items.outputFormat);
 });
 
